@@ -1,8 +1,8 @@
 const CACHE_NAME = 'pascora-wrapper-v1';
 const urlsToCache = [
-  '/Arpal/',
-  '/Arpal/index.html',
-  '/Arpal/manifest.json'
+  '/Pascora/',
+  '/Pascora/index.html',
+  '/Pascora/manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
