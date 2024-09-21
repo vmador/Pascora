@@ -1,7 +1,8 @@
 {
-  "name": "Pascora",
-  "short_name": "Pascora",
-  "start_url": "/",
+  "name": "Arpal Sounds",
+  "short_name": "Arpal",
+  "start_url": "/Arpal/",
+  "scope": "/Arpal/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
