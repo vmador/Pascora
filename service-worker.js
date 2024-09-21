@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arpal-wrapper-v1';
+const CACHE_NAME = 'pascora-wrapper-v1';
 const urlsToCache = [
   '/Arpal/',
   '/Arpal/index.html',
