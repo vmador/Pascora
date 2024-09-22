@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pascora-pwa-cache-v1';
+const CACHE_NAME = 'pascora-pwa-cache-v2';
 const urlsToCache = [
   '/Pascora/',
   '/Pascora/index.html',
@@ -15,26 +15,13 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.url.includes('api.framer.com')) {
-    event.respondWith(
-      caches.open('api-cache').then((cache) => {
-        return fetch(event.request).then((response) => {
-          cache.put(event.request, response.clone());
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        if (response) {
           return response;
-        }).catch(() => {
-          return cache.match(event.request);
-        });
+        }
+        return fetch(event.request);
       })
-    );
-  } else {
-    event.respondWith(
-      caches.match(event.request)
-        .then((response) => {
-          if (response) {
-            return response;
-          }
-          return fetch(event.request);
-        })
-    );
-  }
+  );
 });
