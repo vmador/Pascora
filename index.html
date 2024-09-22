@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-    <iframe id="framerContent" src="https://pascora.framer.website" allowfullscreen allow="storage-access"></iframe>
+    <iframe id="framerContent" src="https://pascora.framer.website" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
@@ -43,6 +43,30 @@
                 }
             });
         }
+
+        // Función para solicitar permisos
+        function requestPermissions() {
+            if ('permissions' in navigator) {
+                navigator.permissions.query({name:'geolocation'}).then(function(result) {
+                    if (result.state === 'granted') {
+                        console.log('Permiso de ubicación ya concedido');
+                    } else if (result.state === 'prompt') {
+                        console.log('Solicitando permiso de ubicación');
+                        navigator.geolocation.getCurrentPosition(() => {}, () => {}, {});
+                    }
+                });
+
+                // Solicitar permiso de notificaciones
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(function(result) {
+                        console.log('Permiso de notificaciones:', result);
+                    });
+                }
+            }
+        }
+
+        // Llamar a la función cuando se carga la página
+        window.addEventListener('load', requestPermissions);
     </script>
 </body>
 </html>
