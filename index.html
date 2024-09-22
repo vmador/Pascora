@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pascora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pascora PWA</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="/Pascora/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/Pascora/icon-512x512.png">
     <link rel="apple-touch-icon" href="/Pascora/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Pascora">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pascora PWA">
     <style>
         body, html {
             margin: 0;
@@ -26,7 +26,7 @@
     </style>
 </head>
 <body>
-    <iframe id="framerContent" src="https://pascora.framer.website" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
+    <iframe id="framerContent" src="https://pascora.framer.app" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
