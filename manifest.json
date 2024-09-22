@@ -1,5 +1,5 @@
 {
-  "name": "Pascora PWA",
+  "name": "Pascora",
   "short_name": "Pascora",
   "start_url": "/Pascora/",
   "scope": "/Pascora/",
@@ -17,5 +17,11 @@
       "sizes": "512x512",
       "type": "image/png"
     }
+  ],
+  "permissions": [
+    "geolocation",
+    "camera",
+    "microphone",
+    "notifications"
   ]
 }
