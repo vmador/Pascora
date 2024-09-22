@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pascora</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/Pascora/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/Pascora/icon-512x512.png">
+    <link rel="apple-touch-icon" href="/Pascora/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Pascora">
     <style>
         body, html {
             margin: 0;
@@ -20,12 +26,22 @@
     </style>
 </head>
 <body>
-    <iframe id="framerContent" src="https://pascora.framer.website/"  allowfullscreen allow="storage-access></iframe>
+    <iframe id="framerContent" src="https://pascora.framer.website" allowfullscreen allow="storage-access"></iframe>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
                 .then(reg => console.log('Service Worker registrado'))
                 .catch(err => console.log('Error al registrar Service Worker', err));
+        }
+        
+        if (navigator.storage && navigator.storage.persist) {
+            navigator.storage.persist().then(function(persistent) {
+                if (persistent) {
+                    console.log("Almacenamiento persistente concedido.");
+                } else {
+                    console.log("Almacenamiento persistente no concedido.");
+                }
+            });
         }
     </script>
 </body>
