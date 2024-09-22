@@ -27,46 +27,52 @@
 </head>
 <body>
     <iframe id="framerContent" src="https://pascora.framer.app" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('Service Worker registrado'))
-                .catch(err => console.log('Error al registrar Service Worker', err));
-        }
+   <script>
+    // Función para enviar mensaje al iframe
+    function sendMessageToIframe(message) {
+        const iframe = document.getElementById('framerContent');
+        iframe.contentWindow.postMessage(message, 'https://pascora.framer.app');
+    }
+
+    // Escuchar mensajes del iframe
+    window.addEventListener('message', function(event) {
+        if (event.origin !== "https://pascora.framer.app") return;
         
-        if (navigator.storage && navigator.storage.persist) {
-            navigator.storage.persist().then(function(persistent) {
-                if (persistent) {
-                    console.log("Almacenamiento persistente concedido.");
-                } else {
-                    console.log("Almacenamiento persistente no concedido.");
-                }
+        if (event.data.type === 'setSessionData') {
+            localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
+        } else if (event.data.type === 'getSessionData') {
+            const sessionData = localStorage.getItem('sessionData');
+            sendMessageToIframe({
+                type: 'sessionDataResponse',
+                sessionData: sessionData ? JSON.parse(sessionData) : null
             });
         }
+    }, false);
 
-        // Función para solicitar permisos
-        function requestPermissions() {
-            if ('permissions' in navigator) {
-                navigator.permissions.query({name:'geolocation'}).then(function(result) {
-                    if (result.state === 'granted') {
-                        console.log('Permiso de ubicación ya concedido');
-                    } else if (result.state === 'prompt') {
-                        console.log('Solicitando permiso de ubicación');
-                        navigator.geolocation.getCurrentPosition(() => {}, () => {}, {});
-                    }
+    // Intentar restaurar la sesión cuando se carga la página
+    window.addEventListener('load', function() {
+        const sessionData = localStorage.getItem('sessionData');
+        if (sessionData) {
+            sendMessageToIframe({
+                type: 'restoreSession',
+                sessionData: JSON.parse(sessionData)
+            });
+        }
+    });
+
+    // Manejar el evento 'visibilitychange' para dispositivos iOS
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            // La app se ha vuelto visible, intentar restaurar la sesión
+            const sessionData = localStorage.getItem('sessionData');
+            if (sessionData) {
+                sendMessageToIframe({
+                    type: 'restoreSession',
+                    sessionData: JSON.parse(sessionData)
                 });
-
-                // Solicitar permiso de notificaciones
-                if ('Notification' in window) {
-                    Notification.requestPermission().then(function(result) {
-                        console.log('Permiso de notificaciones:', result);
-                    });
-                }
             }
         }
-
-        // Llamar a la función cuando se carga la página
-        window.addEventListener('load', requestPermissions);
-    </script>
+    });
+</script>
 </body>
 </html>
