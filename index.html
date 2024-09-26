@@ -17,6 +17,7 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
+            background-color: #000000;
         }
         iframe {
             width: 100%;
@@ -31,12 +32,12 @@
     // Función para enviar mensaje al iframe
     function sendMessageToIframe(message) {
         const iframe = document.getElementById('framerContent');
-        iframe.contentWindow.postMessage(message, 'https://pascora.framer.app');
+        iframe.contentWindow.postMessage(message, 'https://pascora.framer.website');
     }
 
     // Escuchar mensajes del iframe
     window.addEventListener('message', function(event) {
-        if (event.origin !== "https://pascora.framer.app") return;
+        if (event.origin !== "https://pascora.framer.website") return;
         
         if (event.data.type === 'setSessionData') {
             localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
