@@ -27,17 +27,17 @@
     </style>
 </head>
 <body>
-    <iframe id="framerContent" src="https://www.pascora.com/" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
+    <iframe id="framerContent" src="https://goodness-premise-988506.framer.app/" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
    <script>
     // Función para enviar mensaje al iframe
     function sendMessageToIframe(message) {
         const iframe = document.getElementById('framerContent');
-        iframe.contentWindow.postMessage(message, 'https://www.pascora.com/');
+        iframe.contentWindow.postMessage(message, 'https://goodness-premise-988506.framer.app/');
     }
 
     // Escuchar mensajes del iframe
     window.addEventListener('message', function(event) {
-        if (event.origin !== "https://www.pascora.com") return;
+        if (event.origin !== "https://goodness-premise-988506.framer.app/") return;
         
         if (event.data.type === 'setSessionData') {
             localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
