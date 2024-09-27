@@ -27,17 +27,17 @@
     </style>
 </head>
 <body>
-    <iframe id="framerContent" src="https://pascora.framer.website" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
+    <iframe id="framerContent" src="https://www.pascora.com/" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
    <script>
     // Función para enviar mensaje al iframe
     function sendMessageToIframe(message) {
         const iframe = document.getElementById('framerContent');
-        iframe.contentWindow.postMessage(message, 'https://pascora.framer.website');
+        iframe.contentWindow.postMessage(message, 'https://www.pascora.com/');
     }
 
     // Escuchar mensajes del iframe
     window.addEventListener('message', function(event) {
-        if (event.origin !== "https://pascora.framer.website") return;
+        if (event.origin !== "https://www.pascora.com/") return;
         
         if (event.data.type === 'setSessionData') {
             localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
