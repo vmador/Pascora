@@ -37,7 +37,7 @@
 
     // Escuchar mensajes del iframe
     window.addEventListener('message', function(event) {
-        if (event.origin !== "https://www.pascora.com/") return;
+        if (event.origin !== "https://www.pascora.com") return;
         
         if (event.data.type === 'setSessionData') {
             localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
