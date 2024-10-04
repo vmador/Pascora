@@ -1,6 +1,7 @@
 {
   "name": "Pascora PWA",
   "short_name": "Pascora",
+  "description": "Pascora Progressive Web App",
   "start_url": "/Pascora/",
   "scope": "/Pascora/",
   "display": "standalone",
@@ -10,12 +11,14 @@
     {
       "src": "/Pascora/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/Pascora/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "orientation": "portrait",
