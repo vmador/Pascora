@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-actualizada para barra de estado iOS">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -13,6 +12,7 @@ actualizada para barra de estado iOS">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-title" content="Pascora PWA">
+    <meta name="description" content="Pascora Progressive Web App">
     <style>
         body, html {
             margin: 0;
@@ -86,6 +86,17 @@ actualizada para barra de estado iOS">
             }
         }
     });
+
+    // Registrar el Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/Pascora/service-worker.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
     </script>
 </body>
 </html>
