@@ -1,10 +1,10 @@
 const CACHE_NAME = 'pascora-pwa-cache-v2';
 const urlsToCache = [
-  '/Pascora/',
-  '/Pascora/index.html',
-  '/Pascora/manifest.json',
-  '/Pascora/icon-192x192.png',
-  '/Pascora/icon-512x512.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-192x192.png',
+  '/icon-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
