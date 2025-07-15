@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Pascora PWA</title>
+    <title>Pascora Breathwork tracker </title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="/Pascora/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/Pascora/icon-512x512.png">
@@ -14,9 +14,9 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Pascora PWA">
+    <meta name="apple-mobile-web-app-title" content="Pascora Breathwork Tracker">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="Pascora Progressive Web App">
+    <meta name="description" content="Pascora Breathwork tracker">
     <style>
         body, html {
             margin: 0;
@@ -45,12 +45,205 @@
 </head>
 <body>
     <iframe id="framerContent" src="https://pascora.framer.website/" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
+    
+    <script>
+    // Fecha de inicio del ciclo lunar (puedes cambiar esta fecha)
+    const LUNAR_CYCLE_START = new Date('2025-01-01T00:00:00');
+    const CYCLE_DURATION = 30; // 30 días
+    
+    // Función para obtener el día actual del ciclo lunar
+    function getCurrentLunarDay() {
+        const now = new Date();
+        const daysSinceStart = Math.floor((now - LUNAR_CYCLE_START) / (1000 * 60 * 60 * 24));
+        return (daysSinceStart % CYCLE_DURATION) + 1;
+    }
+    
+    // Función para dibujar una luna según la fase
+    function drawMoon(ctx, centerX, centerY, radius, phase) {
+        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const moonColor = isDarkMode ? '#E6E6E6' : '#444';
+        const shadowColor = isDarkMode ? '#333' : '#BBB';
+        
+        // Dibujar el círculo base de la luna
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.fillStyle = moonColor;
+        ctx.fill();
+        
+        // Crear efecto de fase lunar
+        const phaseProgress = (phase - 1) / 29; // Normalizar a 0-1
+        
+        if (phaseProgress < 0.5) {
+            // Luna creciente
+            const shadowWidth = radius * 2 * (0.5 - phaseProgress);
+            ctx.beginPath();
+            ctx.arc(centerX + radius - shadowWidth/2, centerY, shadowWidth/2, Math.PI/2, -Math.PI/2);
+            ctx.fillStyle = shadowColor;
+            ctx.fill();
+        } else {
+            // Luna menguante
+            const shadowWidth = radius * 2 * (phaseProgress - 0.5);
+            ctx.beginPath();
+            ctx.arc(centerX - radius + shadowWidth/2, centerY, shadowWidth/2, -Math.PI/2, Math.PI/2);
+            ctx.fillStyle = shadowColor;
+            ctx.fill();
+        }
+        
+        // Agregar brillo sutil
+        const gradient = ctx.createRadialGradient(
+            centerX - radius/3, centerY - radius/3, 0,
+            centerX, centerY, radius
+        );
+        gradient.addColorStop(0, isDarkMode ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.6)');
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+    }
+    
+    // Actualiza el favicon con la luna y el contador
+    function updateMoonFavicon() {
+        const currentDay = getCurrentLunarDay();
+        const daysRemaining = CYCLE_DURATION - currentDay + 1;
+        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        
+        // Fondo negro acorde a Pascora
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Dibujar la luna
+        drawMoon(ctx, 32, 24, 12, currentDay);
+        
+        // Dibujar el contador
+        const textColor = '#FFFFFF'; // Blanco para contraste con fondo negro
+        ctx.fillStyle = textColor;
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(daysRemaining.toString(), 32, 50);
+        
+        // Pequeño indicador de "días restantes"
+        ctx.font = '8px sans-serif';
+        ctx.fillStyle = '#CCCCCC';
+        ctx.fillText('días', 32, 58);
+        
+        // Aplicar el favicon
+        const faviconURL = canvas.toDataURL('image/png');
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        link.href = faviconURL;
+        
+        // Actualizar el título con información del ciclo
+        document.title = `Pascora PWA - ${daysRemaining} días para la experiencia`;
+    }
+    
+    // Función para mostrar notificación cuando llegue a 30
+    function checkForSpecialEvent() {
+        const currentDay = getCurrentLunarDay();
+        if (currentDay === 30) {
+            // Aquí puedes agregar lógica para la "experiencia única"
+            console.log('¡Experiencia única disponible en Pascora!');
+            // Opcional: cambiar el favicon para indicar el evento especial
+            updateSpecialEventFavicon();
+        }
+    }
+    
+    // Favicon especial para el día 30
+    function updateSpecialEventFavicon() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        
+        // Fondo negro con efecto especial
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Luna dorada/brillante para el evento especial
+        const goldGradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 16);
+        goldGradient.addColorStop(0, '#ffd700');
+        goldGradient.addColorStop(1, '#ffb300');
+        
+        ctx.beginPath();
+        ctx.arc(32, 32, 16, 0, Math.PI * 2);
+        ctx.fillStyle = goldGradient;
+        ctx.fill();
+        
+        // Efectos de brillo
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(32, 32, 20, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Texto especial
+        ctx.fillStyle = '#ffd700';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('✨', 32, 48);
+        
+        const faviconURL = canvas.toDataURL('image/png');
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        link.href = faviconURL;
+        
+        document.title = `Pascora PWA - ¡Experiencia única disponible! ✨`;
+    }
+    
+    // Inicializar cuando se carga la página
+    window.addEventListener('load', () => {
+        updateMoonFavicon();
+        checkForSpecialEvent();
+        
+        // Actualizar cada hora
+        setInterval(() => {
+            updateMoonFavicon();
+            checkForSpecialEvent();
+        }, 60 * 60 * 1000);
+        
+        // Actualizar cuando cambie el tema
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateMoonFavicon);
+    });
+    
+    // Actualizar a medianoche
+    function scheduleNextUpdate() {
+        const now = new Date();
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        const msUntilMidnight = tomorrow.getTime() - now.getTime();
+        
+        setTimeout(() => {
+            updateMoonFavicon();
+            checkForSpecialEvent();
+            scheduleNextUpdate(); // Programar la siguiente actualización
+        }, msUntilMidnight);
+    }
+    
+    scheduleNextUpdate();
+    </script>
+    
     <script>
     // Función para enviar mensaje al iframe
     function sendMessageToIframe(message) {
         const iframe = document.getElementById('framerContent');
         iframe.contentWindow.postMessage(message, 'https://pascora.framer.website/');
     }
+    
     // Escuchar mensajes del iframe
     window.addEventListener('message', function(event) {
         if (event.origin !== "https://pascora.framer.website/") return;
@@ -65,6 +258,7 @@
             });
         }
     }, false);
+    
     // Intentar restaurar la sesión cuando se carga la página
     window.addEventListener('load', function() {
         const sessionData = localStorage.getItem('sessionData');
@@ -75,6 +269,7 @@
             });
         }
     });
+    
     // Manejar el evento 'visibilitychange' para dispositivos iOS
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
