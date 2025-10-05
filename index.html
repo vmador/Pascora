@@ -247,7 +247,7 @@
     }
     
     window.addEventListener('message', function(event) {
-        if (event.origin !== "https://pascora.framer.website") return;
+        if (event.origin !== "https://pascora.framer.website/") return;
         
         if (event.data.type === 'setSessionData') {
             localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
