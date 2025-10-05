@@ -3,50 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Pascora Breathwork tracker </title>
+    <title>Pascora</title>
+    <meta name="description" content="Breath like a gentle Breeze.">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="/Pascora/icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/Pascora/icon-512x512.png">
-    <link rel="apple-touch-icon" href="/Pascora/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#ffffff">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Pascora Breathwork Tracker">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="Pascora Breathwork tracker">
+    <meta name="apple-mobile-web-app-title" content="Pascora">
+    <meta property="og:title" content="Pascora">
+    <meta property="og:description" content="Breath like a gentle Breeze.">
+    <meta property="og:image" content="/social-preview.png">
+    <meta property="og:url" content="https://pascora.framer.website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pascora">
+    <meta name="twitter:description" content="Breath like a gentle Breeze.">
+    <meta name="twitter:image" content="/social-preview.png">
+    
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000;
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: #ffffff; 
         }
-        iframe {
-            width: 100lvw;
-            height: 100lvh;
-            border: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        iframe { 
+            width: 100lvw; 
+            height: 100lvh; 
+            border: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
         }
-        @supports(padding: max(0px)) {
-            body, iframe {
-                padding-top: env(safe-area-inset-top);
-                height: calc(100lvh - env(safe-area-inset-top));
+        
+        /* Full Screen Mode (Redpills style) */
+        @supports (-webkit-touch-callout: none) {
+            @media not all and (display-mode: standalone) {
+                iframe { height: 100dvh; }
             }
         }
+        @supports (-webkit-touch-callout: none) {
+            html, body, iframe {
+                height: 100vh !important;
+                max-height: 100vh !important;
+                min-height: 100vh !important;
+                overflow: hidden !important;
+            }
+        }
+        
+        
     </style>
 </head>
 <body>
     <iframe id="framerContent" src="https://pascora.framer.website/" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
     
     <script>
+    // ========== FAVICON INTERACTIVO - SISTEMA DE FASES LUNARES ==========
+    
     // Fecha de inicio del ciclo lunar (puedes cambiar esta fecha)
     const LUNAR_CYCLE_START = new Date('2025-01-01T00:00:00');
     const CYCLE_DURATION = 30; // 30 días
@@ -114,15 +133,15 @@
         canvas.height = 64;
         const ctx = canvas.getContext('2d');
         
-        // Fondo negro acorde a Pascora
-        ctx.fillStyle = '#000000';
+        // Fondo blanco acorde a Pascora
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         // Dibujar la luna
         drawMoon(ctx, 32, 24, 12, currentDay);
         
         // Dibujar el contador
-        const textColor = '#FFFFFF'; // Blanco para contraste con fondo negro
+        const textColor = '#000000'; // Negro para contraste con fondo blanco
         ctx.fillStyle = textColor;
         ctx.font = 'bold 16px sans-serif';
         ctx.textAlign = 'center';
@@ -131,7 +150,7 @@
         
         // Pequeño indicador de "días restantes"
         ctx.font = '8px sans-serif';
-        ctx.fillStyle = '#CCCCCC';
+        ctx.fillStyle = '#666666';
         ctx.fillText('días', 32, 58);
         
         // Aplicar el favicon
@@ -145,7 +164,7 @@
         link.href = faviconURL;
         
         // Actualizar el título con información del ciclo
-        document.title = `New Experience - ${daysRemaining} Days for the experience`;
+        document.title = `Pascora - ${daysRemaining} Days for the experience`;
     }
     
     // Función para mostrar notificación cuando llegue a 30
@@ -166,8 +185,8 @@
         canvas.height = 64;
         const ctx = canvas.getContext('2d');
         
-        // Fondo negro con efecto especial
-        ctx.fillStyle = '#000000';
+        // Fondo blanco con efecto especial
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         // Luna dorada/brillante para el evento especial
@@ -203,23 +222,8 @@
         }
         link.href = faviconURL;
         
-        document.title = `Pascora PWA - ¡Experiencia única disponible! ✨`;
+        document.title = `Pascora - ¡Experiencia única disponible! ✨`;
     }
-    
-    // Inicializar cuando se carga la página
-    window.addEventListener('load', () => {
-        updateMoonFavicon();
-        checkForSpecialEvent();
-        
-        // Actualizar cada hora
-        setInterval(() => {
-            updateMoonFavicon();
-            checkForSpecialEvent();
-        }, 60 * 60 * 1000);
-        
-        // Actualizar cuando cambie el tema
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateMoonFavicon);
-    });
     
     // Actualizar a medianoche
     function scheduleNextUpdate() {
@@ -234,17 +238,16 @@
         }, msUntilMidnight);
     }
     
-    scheduleNextUpdate();
-    </script>
+    // ========== FIN FAVICON INTERACTIVO ==========
     
-    <script>
-    // Función para enviar mensaje al iframe
+    
+    // ========== COMUNICACIÓN CON IFRAME Y SESSION STORAGE ==========
+    
     function sendMessageToIframe(message) {
         const iframe = document.getElementById('framerContent');
         iframe.contentWindow.postMessage(message, 'https://pascora.framer.website/');
     }
     
-    // Escuchar mensajes del iframe
     window.addEventListener('message', function(event) {
         if (event.origin !== "https://pascora.framer.website/") return;
         
@@ -258,9 +261,25 @@
             });
         }
     }, false);
-    
-    // Intentar restaurar la sesión cuando se carga la página
+
     window.addEventListener('load', function() {
+        // Inicializar favicon interactivo
+        updateMoonFavicon();
+        checkForSpecialEvent();
+        
+        // Actualizar cada hora
+        setInterval(() => {
+            updateMoonFavicon();
+            checkForSpecialEvent();
+        }, 60 * 60 * 1000);
+        
+        // Actualizar cuando cambie el tema
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateMoonFavicon);
+        
+        // Programar actualización a medianoche
+        scheduleNextUpdate();
+        
+        // Restaurar sesión
         const sessionData = localStorage.getItem('sessionData');
         if (sessionData) {
             sendMessageToIframe({
@@ -269,11 +288,9 @@
             });
         }
     });
-    
-    // Manejar el evento 'visibilitychange' para dispositivos iOS
+
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
-            // La app se ha vuelto visible, intentar restaurar la sesión
             const sessionData = localStorage.getItem('sessionData');
             if (sessionData) {
                 sendMessageToIframe({
@@ -284,16 +301,31 @@
         }
     });
 
-    // Registrar el Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/Pascora/service-worker.js').then(function(registration) {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                // Registration successful
             }, function(err) {
-                console.log('ServiceWorker registration failed: ', err);
+                // Registration failed
             });
         });
     }
+
+    
+    // Dynamic viewport adjustment for dvh units
+    function updateViewportHeight() {
+        document.documentElement.style.setProperty('--dvh', window.innerHeight + 'px');
+    }
+
+    if ('lvh' === 'dvh') {
+        // Set initial value
+        updateViewportHeight();
+        
+        // Update on resize or orientation change
+        window.addEventListener('resize', updateViewportHeight);
+        window.addEventListener('orientationchange', updateViewportHeight);
+    }
+    
     </script>
 </body>
 </html>
