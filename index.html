@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Pascora</title>
     <meta name="description" content="Breath like a gentle Breeze.">
-    <link rel="manifest" href="/Pascora/manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="/Pascora/icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/Pascora/icon-512x512.png">
-    <link rel="apple-touch-icon" href="/Pascora/icon-192x192.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
@@ -186,10 +186,10 @@
         }
     });
 
-    // Service Worker - LA RUTA CORRECTA
+    // Service Worker - RUTA CORRECTA PARA RAÍZ
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/Pascora/service-worker.js').then(function(registration) {
+            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
                 console.log('ServiceWorker registered');
             }, function(err) {
                 console.log('ServiceWorker failed:', err);
