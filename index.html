@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Pascora</title>
     <meta name="description" content="Breath like a gentle Breeze.">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
     <link rel="apple-touch-icon" href="/icon-192x192.png">
@@ -14,49 +14,46 @@
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Pascora">
+    <meta property="og:title" content="Pascora">
+    <meta property="og:description" content="Breath like a gentle Breeze.">
+    <meta property="og:image" content="/social-preview.png">
+    <meta property="og:url" content="https://pascora.framer.website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pascora">
+    <meta name="twitter:description" content="Breath like a gentle Breeze.">
+    <meta name="twitter:image" content="/social-preview.png">
     
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000;
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: #000000; 
+        }
+        iframe { 
+            width: 100lvw; 
+            height: 100lvh; 
+            border: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
         }
         
-        /* Comportamiento NORMAL en navegador */
-        iframe {
-            width: 100vw;
-            height: 100vh;
-            border: none;
-            position: relative;
-        }
-        
-        /* Solo cuando está instalado como PWA */
-        @media (display-mode: standalone), (display-mode: fullscreen) {
-            iframe {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                width: 100vw;
-                height: 100vh;
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
+        /* Full Screen Mode (Redpills style) */
+        @supports (-webkit-touch-callout: none) {
+            @media not all and (display-mode: standalone) {
+                iframe { height: 100dvh; }
             }
         }
-        
-        /* iOS específico para PWA */
         @supports (-webkit-touch-callout: none) {
-            @media (display-mode: standalone) {
-                html, body {
-                    height: 100vh;
-                    overflow: hidden;
-                }
-                iframe {
-                    height: 100vh;
-                }
+            html, body, iframe {
+                height: 100vh !important;
+                max-height: 100vh !important;
+                min-height: 100vh !important;
+                overflow: hidden !important;
             }
         }
     </style>
@@ -211,11 +208,22 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-                console.log('SW registered');
+                // Registration successful
             }, function(err) {
-                console.log('SW failed');
+                // Registration failed
             });
         });
+    }
+
+    // Dynamic viewport adjustment for dvh units
+    function updateViewportHeight() {
+        document.documentElement.style.setProperty('--dvh', window.innerHeight + 'px');
+    }
+
+    if ('lvh' === 'dvh') {
+        updateViewportHeight();
+        window.addEventListener('resize', updateViewportHeight);
+        window.addEventListener('orientationchange', updateViewportHeight);
     }
     </script>
 </body>
