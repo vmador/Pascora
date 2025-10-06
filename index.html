@@ -24,39 +24,38 @@
             background-color: #000000;
         }
         
-        /* Comportamiento normal en navegador */
+        /* Comportamiento NORMAL en navegador */
         iframe {
             width: 100vw;
             height: 100vh;
             border: none;
+            position: relative;
         }
         
-        /* Cuando está instalado como PWA (fullscreen / standalone) */
-        @media all and (display-mode: standalone), 
-               all and (display-mode: fullscreen) {
+        /* Solo cuando está instalado como PWA */
+        @media (display-mode: standalone), (display-mode: fullscreen) {
             iframe {
-                width: 100vw;
-                height: 100vh;
                 position: fixed;
                 top: 0;
                 left: 0;
-                
-                /* Evita que notch/barra tape contenido */
+                right: 0;
+                bottom: 0;
+                width: 100vw;
+                height: 100vh;
                 padding-top: env(safe-area-inset-top);
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
                 padding-bottom: env(safe-area-inset-bottom);
             }
         }
         
-        /* iOS específico */
+        /* iOS específico para PWA */
         @supports (-webkit-touch-callout: none) {
-            @media all and (display-mode: standalone) {
-                html, body, iframe {
-                    height: 100vh !important;
-                    max-height: 100vh !important;
-                    min-height: 100vh !important;
-                    overflow: hidden !important;
+            @media (display-mode: standalone) {
+                html, body {
+                    height: 100vh;
+                    overflow: hidden;
+                }
+                iframe {
+                    height: 100vh;
                 }
             }
         }
@@ -180,12 +179,14 @@
             });
         }
     }, false);
-    
+
     window.addEventListener('load', function() {
+        // Favicon
         updateMoonFavicon();
         setInterval(updateMoonFavicon, 60 * 60 * 1000);
         scheduleNextUpdate();
         
+        // Sesión
         const sessionData = localStorage.getItem('sessionData');
         if (sessionData) {
             sendMessageToIframe({
@@ -194,7 +195,7 @@
             });
         }
     });
-    
+
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
             const sessionData = localStorage.getItem('sessionData');
@@ -207,13 +208,12 @@
         }
     });
 
-    // Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-                console.log('ServiceWorker registered');
+                console.log('SW registered');
             }, function(err) {
-                console.log('ServiceWorker failed:', err);
+                console.log('SW failed');
             });
         });
     }
