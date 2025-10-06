@@ -56,12 +56,78 @@
                 overflow: hidden !important;
             }
         }
+        
+        /* DEBUG PANEL */
+        #debugPanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            background: rgba(0,0,0,0.9);
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 10px;
+            padding: 10px;
+            overflow-y: auto;
+            z-index: 9999;
+            display: none;
+        }
+        #debugPanel.active {
+            display: block;
+        }
+        #debugToggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            z-index: 10000;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+    <!-- BOTÓN PARA ACTIVAR DEBUG -->
+    <button id="debugToggle">🐛 DEBUG</button>
+    <div id="debugPanel"></div>
+    
     <iframe id="framerContent" src="https://pascora.framer.website/" allowfullscreen allow="geolocation; camera; microphone; storage-access"></iframe>
     
     <script>
+    // ========== DEBUG PANEL ==========
+    const debugPanel = document.getElementById('debugPanel');
+    const debugToggle = document.getElementById('debugToggle');
+    
+    debugToggle.addEventListener('click', () => {
+        debugPanel.classList.toggle('active');
+        updateDebugInfo();
+    });
+    
+    function updateDebugInfo() {
+        const sessionData = localStorage.getItem('sessionData');
+        const allLocalStorage = { ...localStorage };
+        
+        let html = '<h3>📊 DEBUG INFO</h3>';
+        html += '<h4>localStorage completo:</h4>';
+        html += '<pre>' + JSON.stringify(allLocalStorage, null, 2) + '</pre>';
+        html += '<h4>sessionData específico:</h4>';
+        html += '<pre>' + (sessionData || 'NULL - No hay datos') + '</pre>';
+        html += '<h4>Tamaño:</h4>';
+        html += '<p>' + (sessionData ? sessionData.length : 0) + ' caracteres</p>';
+        html += '<h4>Timestamp:</h4>';
+        html += '<p>' + new Date().toISOString() + '</p>';
+        html += '<button onclick="localStorage.clear(); updateDebugInfo();">🗑️ Limpiar localStorage</button>';
+        
+        debugPanel.innerHTML = html;
+    }
+    
+    // Hacer updateDebugInfo global para el botón
+    window.updateDebugInfo = updateDebugInfo;
+    
     // ========== FAVICON INTERACTIVO - SISTEMA DE FASES LUNARES ==========
     
     // Fecha de inicio del ciclo lunar (puedes cambiar esta fecha)
@@ -244,19 +310,27 @@
     function sendMessageToIframe(message) {
         const iframe = document.getElementById('framerContent');
         iframe.contentWindow.postMessage(message, 'https://pascora.framer.website/');
+        
+        // LOG para debug
+        console.log('📤 Mensaje enviado al iframe:', message);
     }
     
     window.addEventListener('message', function(event) {
+        // LOG para debug
+        console.log('📥 Mensaje recibido:', event.origin, event.data);
+        
         if (event.origin !== "https://pascora.framer.website/") return;
         
         if (event.data.type === 'setSessionData') {
             localStorage.setItem('sessionData', JSON.stringify(event.data.sessionData));
+            console.log('💾 Datos guardados en localStorage');
         } else if (event.data.type === 'getSessionData') {
             const sessionData = localStorage.getItem('sessionData');
             sendMessageToIframe({
                 type: 'sessionDataResponse',
                 sessionData: sessionData ? JSON.parse(sessionData) : null
             });
+            console.log('📤 Datos enviados al iframe');
         }
     }, false);
 
@@ -279,6 +353,7 @@
         
         // Restaurar sesión
         const sessionData = localStorage.getItem('sessionData');
+        console.log('🔄 Intentando restaurar sesión:', sessionData ? 'Datos encontrados' : 'Sin datos');
         if (sessionData) {
             sendMessageToIframe({
                 type: 'restoreSession',
@@ -289,6 +364,7 @@
 
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
+            console.log('👁️ App visible de nuevo');
             const sessionData = localStorage.getItem('sessionData');
             if (sessionData) {
                 sendMessageToIframe({
@@ -302,9 +378,9 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-                // Registration successful
+                console.log('✅ ServiceWorker registrado');
             }, function(err) {
-                // Registration failed
+                console.log('❌ ServiceWorker falló:', err);
             });
         });
     }
